@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import os 
 
 def png_to_csv(name, delim=' '):
     ''' Convert a binary image to a CSV file. '''
@@ -26,30 +27,39 @@ def csv_to_png(name, delim=' '):
     # Save the binary image as a PNG file
     cv2.imwrite(f'Environment/maps/{name}.png', binary_image)
 
-def csv_to_npy(name, delim=' '):
+def csv_to_npy(name):
     ''' Convert a CSV file to a NumPy file. '''
-    if 'mask' in name or 'plantilla' in name or 'nodes' in name:
-        # Load the CSV file
-        binary_image = np.loadtxt(f'Environment/maps/{name}.csv', delimiter=delim)
+    if os.path.exists(f'{name}mask.csv'):
+        binary_image = np.loadtxt(f'{name}mask.csv', delimiter=" ")
+    elif os.path.exists(f'{name}plantilla.csv'):
+        binary_image = np.loadtxt(f'{name}plantilla.csv', delimiter=" ")
+    else:
+        raise ValueError('The file does not exist')
 
-        # Save the binary image as a NumPy file
-        np.save(f'Environment/maps/{name}.npy', binary_image)
-    elif 'latlon' in name or 'grid' in name:
-        # There is a two component array in each cell #
+    # Save the binary image as a NumPy file
+    np.save(f'{name}mask.npy', binary_image)
 
-        # Load the CSV file
-        binary_image = np.loadtxt(f'Environment/maps/{name}.csv', delimiter=delim, dtype=str)
-        lat_lon_map = np.zeros((binary_image.shape[0], binary_image.shape[1], 2), dtype=np.float64)
+    if os.path.exists(f'{name}latlon.csv'):
+        latlon_image = np.loadtxt(f'{name}latlon.csv', delimiter=";", dtype=str)
+    elif os.path.exists(f'{name}grid.csv'):
+        latlon_image = np.loadtxt(f'{name}grid.csv', delimiter=";", dtype=str)
+    else:
+        raise ValueError('The file does not exist')
 
-        # Convert the strings to tuples
-        for i in range(binary_image.shape[0]):
-            for j in range(binary_image.shape[1]):
-                lat = binary_image[i, j].split(',')[0]
-                lon = binary_image[i, j].split(',')[1]
+    lat_lon_map = np.zeros((binary_image.shape[0], binary_image.shape[1], 2), dtype=np.float64)
+
+    # Convert the strings to tuples
+    for i in range(binary_image.shape[0]):
+        for j in range(binary_image.shape[1]):
+            try:
+                lat = latlon_image[i, j].split(',')[0]
+                lon = latlon_image[i, j].split(',')[1]
                 lat_lon_map[i, j] = [float(lat), float(lon)]
-        
-        # Save the binary image as a NumPy file
-        np.save(f'Environment/maps/{name}.npy', lat_lon_map)
+            except:
+                pass
+    # Save the binary image as a NumPy file
+    np.save(f'{name}latlon.npy', lat_lon_map)
+
 
 def csv_downsize(name, delim=' ', factor=2, output_name=None):
     ''' Downsize a CSV file. '''
