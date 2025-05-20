@@ -19,13 +19,13 @@ def png_to_csv(name, delim=' '):
 def csv_to_png(name, delim=' '):
     ''' Convert a CSV file to a binary image. '''
     # Load the CSV file
-    binary_image = np.loadtxt(f'Environment/maps/{name}.csv', delimiter=delim)
+    binary_image = np.loadtxt(f'{name}.csv', delimiter=delim)
 
     # Convert the binary image to 0s and 255s
     binary_image = np.where(binary_image > 0, 255, 0)
 
     # Save the binary image as a PNG file
-    cv2.imwrite(f'Environment/maps/{name}.png', binary_image)
+    cv2.imwrite(f'{name}.png', binary_image)
 
 def csv_to_npy(name):
     ''' Convert a CSV file to a NumPy file. '''

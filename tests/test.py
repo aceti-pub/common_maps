@@ -40,9 +40,10 @@ def plot_grid(map):
     
 
 
-from aceti.old.maps_utils import csv_to_npy
+from aceti.old.maps_utils import csv_to_npy, csv_to_png
 
-csv_to_npy("alamillo95x216")
+# csv_to_npy("alamillo95x216")
+# csv_to_png("alamillo95x216plantilla")
 
 # plot_grid("alamilloaccess11x15")
 plot_grid("alamillo95x216")
