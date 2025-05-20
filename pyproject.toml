@@ -2,7 +2,7 @@
 requires = ["hatchling >= 1.26"]
 build-backend = "hatchling.build"
 [project]
-name = "aceti_maps"
+name = "aceti"
 version = "0.0.1"
 authors = [
   { name="Alejandro Casado", email="acasado4@us.es" },
@@ -19,6 +19,9 @@ classifiers = [
 ]
 license = "MIT"
 license-files = ["LICEN[CS]E*"]
+dependencies = [
+  "numpy",
+]
 
 [project.urls]
 Homepage = "https://github.com/aceti-pub/common_maps"

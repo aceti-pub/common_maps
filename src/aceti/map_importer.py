@@ -8,7 +8,7 @@ else:
     # importlib.resources has files(), so use that:
     import importlib.resources as importlib_resources
 
-def map_importer(map_name: str):
+def import_map(map_name: str):
     """
     Import a map from a file and return the base matrix and lat/lon map.
     Args:
@@ -16,13 +16,14 @@ def map_importer(map_name: str):
     Returns:
         tuple: A tuple containing the base matrix and lat/lon map.
     """
+    map_name = map_name.lower()
     pkg = importlib_resources.files("aceti_maps")
     if os.path.exists(pkg.joinpath("maps", f"{map_name}mask.npy")):
         print(f"Loading map {map_name} from repo directory")
 
-    base_matrix = np.load(os.path.join("maps", f"{map_name}.npy"))
+    base_matrix = np.load(pkg.joinpath("maps", f"{map_name}mask.npy"))
 
     # Load the lat/lon map
-    lat_lon_map = np.load(os.path.join("maps", f"lat_lon_{map_name}.npy"))
+    lat_lon_map = np.load(pkg.joinpath("maps", f"{map_name}latlon.npy"))
 
     return base_matrix, lat_lon_map
